@@ -1,0 +1,18 @@
+subject = "An order's been placed. Time to ship!"
+==
+Hi {{ name }},
+
+An order has been placed for {{ items|length }} item{% if items|length != 1 %}s{% endif %} from your website, the details of which are as follows:
+
+<h3>Customer Information</h3>
+Name: {{ customer_name }}
+Email: {{ customer_email }}
+<small>Hint - you can contact the customer by hitting reply.</small>
+
+<h3>Order Items</h3>
+{% for item in items %}
+{{ item.qty }} x {{ item.name }} @ {{ item.price|currency }}
+{% endfor %}
+Order total: {{ total|currency }}
+
+Thanks for using Octoshop!

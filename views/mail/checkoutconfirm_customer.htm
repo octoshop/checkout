@@ -1,0 +1,17 @@
+subject = "Confirmation of {{ site }} order"
+==
+Hi {{ name }},
+
+You recently placed an order for {{ items|length }} item{% if items|length != 1 %}s{% endif %} from our website, the details of which are as follows:
+
+{% for item in items %}
+{{ item.qty }} x {{ item.name }} @ {{ item.price|currency }}
+{% endfor %}
+Order total: {{ order.total|currency }}
+
+Thank you for your order!
+{{ site }} Team
+
+-----
+
+This email was sent automatically by Octoshop, the magic behind {{ site }}. Please do not reply.
