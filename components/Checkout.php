@@ -27,8 +27,8 @@ class Checkout extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => '',
-            'description' => '',
+            'name'        => 'Checkout',
+            'description' => 'Displays the checkout form on a page.',
         ];
     }
 
