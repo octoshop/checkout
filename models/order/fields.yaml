@@ -1,0 +1,46 @@
+tabs:
+    fields:
+
+        shipping_name:
+            label: Name
+            tab: Shipping Address
+        shipping_line1:
+            label: Address Line 1
+            tab: Shipping Address
+        shipping_line2:
+            label: Address Line 2
+            tab: Shipping Address
+        shipping_town:
+            label: Town
+            tab: Shipping Address
+        shipping_region:
+            label: Region
+            tab: Shipping Address
+        shipping_postcode:
+            label: Postal Code
+            tab: Shipping Address
+        shipping_country:
+            label: Country
+            tab: Shipping Address
+
+        billing_name:
+            label: Name
+            tab: Billing Address
+        billing_line1:
+            label: Address Line 1
+            tab: Billing Address
+        billing_line2:
+            label: Address Line 2
+            tab: Billing Address
+        billing_town:
+            label: Town
+            tab: Billing Address
+        billing_region:
+            label: Region
+            tab: Billing Address
+        billing_postcode:
+            label: Postal Code
+            tab: Billing Address
+        billing_country:
+            label: Country
+            tab: Billing Address

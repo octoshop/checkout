@@ -1,0 +1,34 @@
+# Model List Column configuration
+list: $/octoshop/checkout/models/order/columns.yaml
+
+# Model Class name
+modelClass: Octoshop\Checkout\Models\Order
+
+# List Title
+title: Manage Orders
+
+# Link URL for each record
+recordUrl: octoshop/checkout/orders/update/:id
+
+# Message to display if the list is empty
+noRecordsMessage: backend::lang.list.no_records
+
+# Records to display per page
+recordsPerPage: 20
+
+# Displays the list column set up button
+showSetup: true
+
+# Displays the sorting link on each column
+showSorting: true
+
+# Default sorting column
+defaultSort:
+    column: created_at
+    direction: desc
+
+# Toolbar widget configuration
+toolbar:
+    # Search widget configuration
+    search:
+        prompt: backend::lang.list.search_prompt

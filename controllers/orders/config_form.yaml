@@ -1,0 +1,23 @@
+# Record name
+name: Order
+
+# Model Form Field configuration
+form: $/octoshop/checkout/models/order/fields.yaml
+
+# Model Class name
+modelClass: Octoshop\Checkout\Models\Order
+
+# Default redirect location
+defaultRedirect: octoshop/checkout/orders
+
+# Create page
+create:
+    title: Create Order
+    redirect: octoshop/checkout/orders/update/:id
+    redirectClose: octoshop/checkout/orders
+
+# Update page
+update:
+    title: Edit Order
+    redirect: octoshop/checkout/orders
+    redirectClose: octoshop/checkout/orders
