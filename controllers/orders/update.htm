@@ -1,3 +1,5 @@
+<?php $oc = System\Classes\PluginManager::instance(); ?>
+
 <?php Block::put('breadcrumb') ?>
     <ul>
         <li><a href="<?= Backend::url('octoshop/checkout/orders') ?>">Orders</a></li>
@@ -35,6 +37,12 @@
                     </p>
                     <p class="description"></p>
                 </div>
+                <?php if ($oc->exists('Octoshop.Shipping')): ?>
+                <div class="scoreboard-item title-value">
+                    <h4>Shipping Option</h4>
+                    <p><?= $formModel->shipping_option->name ?></p>
+                </div>
+                <?php endif ?>
                 <div class="scoreboard-item title-value">
                     <h4>Total Value</h4>
                     <p style="color: #95b753;">
