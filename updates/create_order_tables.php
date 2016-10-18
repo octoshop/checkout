@@ -13,6 +13,7 @@ class CreateOrderTables extends Migration
             $table->increments('id');
             $table->string('hash', 36)->unique();
             $table->integer('user_id')->unsigned();
+            $table->integer('status_id')->unsigned()->default(1);
             $this->addAddressCols($table, 'billing');
             $this->addAddressCols($table, 'shipping');
             $table->timestamps();
@@ -27,6 +28,13 @@ class CreateOrderTables extends Migration
             $table->decimal('price', 20, 5)->default(0);
             $table->decimal('subtotal', 20, 5)->default(0);
             $table->timestamps();
+        });
+
+        Schema::create('octoshop_order_statuses', function(Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('colour');
         });
     }
 
@@ -46,5 +54,6 @@ class CreateOrderTables extends Migration
     {
         Schema::dropIfExists('octoshop_orders');
         Schema::dropIfExists('octoshop_order_items');
+        Schema::dropIfExists('octoshop_order_statuses');
     }
 }

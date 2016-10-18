@@ -1,6 +1,9 @@
 # Model List Column configuration
 list: $/octoshop/checkout/models/order/columns.yaml
 
+# List filters configuration
+filter: config_filter.yaml
+
 # Model Class name
 modelClass: Octoshop\Checkout\Models\Order
 

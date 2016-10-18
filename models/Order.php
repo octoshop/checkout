@@ -28,6 +28,7 @@ class Order extends Model
     ];
     public $belongsTo = [
         'user' => 'RainLab\User\Models\User',
+        'status' => 'Octoshop\Checkout\Models\OrderStatus',
     ];
 
     public function beforeCreate()

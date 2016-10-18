@@ -23,6 +23,10 @@ columns:
     shipping_country:
         label: Country
         searchable: true
+    status:
+        label: Status
+        relation: status
+        select: name
     created_at:
         label: Date Placed
         searchable: true

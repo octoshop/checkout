@@ -1,0 +1,7 @@
+scopes:
+
+    status_id:
+        label: Status
+        type: group
+        modelClass: Octoshop\Checkout\Models\OrderStatus
+        conditions: status_id in (:filtered)

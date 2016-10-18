@@ -1,3 +1,4 @@
 1.0.0:
     - Birth of Octoshop Checkout
     - create_order_tables.php
+    - seed_order_tables.php

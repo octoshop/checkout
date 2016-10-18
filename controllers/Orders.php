@@ -27,9 +27,16 @@ class Orders extends Controller
     {
         $this->vars['orderTotal'] = Order::count();
 
+        $this->vars['statusCounts'] = \DB::table('octoshop_orders AS o')
+                                    ->select(\DB::raw('s.name, s.colour, count(*) as count'))
+                                    ->leftJoin('octoshop_order_statuses AS s', 's.id', '=', 'o.status_id')
+                                    ->groupBy('s.name')
+                                    ->orderBy('s.id', 'DESC')
+                                    ->get();
+
         $this->vars['orderCountClass'] = $this->scoreboardClass(
-            $this->vars['orderCount'] = Order::createdThisMonth()->count(),
-            $this->vars['orderCountLast'] = Order::createdLastMonth()->count()
+            $this->vars['orderCountLast'] = Order::createdLastMonth()->count(),
+            $this->vars['orderCount'] = Order::createdThisMonth()->count()
         );
 
         return $this->asExtension('ListController')->index();
