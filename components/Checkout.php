@@ -4,7 +4,9 @@ use Auth;
 use Cart;
 use Event;
 use Backend\Models\BrandSetting;
-use Cms\Classes\ComponentBase;
+use Octoshop\Core\Components\ComponentBase;
+use Octoshop\Checkout\Models\Order;
+use Octoshop\Checkout\Models\OrderItem;
 use Octoshop\Core\Checkout\Confirmation;
 use Octoshop\Core\Models\ShopSetting;
 
@@ -45,6 +47,8 @@ class Checkout extends ComponentBase
         $this->sendCustomerConfirmation = $config->send_customer_confirmation;
         $this->recipientName = $config->recipient_name;
         $this->recipientEmail = $config->recipient_email;
+
+        $this->loadOrder();
     }
 
     public function onRun()
@@ -58,6 +62,36 @@ class Checkout extends ComponentBase
         }
 
         $this->items = Cart::content();
+    }
+
+    protected function loadOrder($order = null)
+    {
+        if ($this->order instanceof Order) {
+            return;
+        }
+
+        $this->setPageProp('order', Order::getFromSession() ?: $this->createOrder());
+    }
+
+    protected function createOrder()
+    {
+        $items = [];
+
+        foreach (Cart::content() as $item) {
+            $items[] = new OrderItem([
+                'name' => $item->name,
+                'quantity' => $item->qty,
+                'price' => $item->price,
+                'subtotal' => $item->qty * $item->price,
+            ]);
+        }
+
+        $order = Order::createForUser(Auth::getUser());
+        $order->items()->saveMany($items);
+
+        Session::put('orderHash', $order->hash);
+
+        return $order;
     }
 
     public function onCheckout()

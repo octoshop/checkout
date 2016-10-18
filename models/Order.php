@@ -1,7 +1,10 @@
 <?php namespace Octoshop\Checkout\Models;
 
 use Model;
+use Session;
 use Carbon\Carbon;
+use Octoshop\Checkout\Models\OrderStatus;
+use RainLab\User\Models\User;
 
 class Order extends Model
 {
@@ -36,6 +39,15 @@ class Order extends Model
         $this->hash = str_random(36);
     }
 
+    public static function getFromSession()
+    {
+        if (!Session::has('orderHash')) {
+            return;
+        }
+
+        return static::findByHash(Session::get('orderHash'));
+    }
+
     public static function findByHash($hash)
     {
         if (!$hash) {
@@ -43,6 +55,42 @@ class Order extends Model
         }
 
         return (new static())->whereHash($hash)->first();
+    }
+
+    public static function createForUser(User $user)
+    {
+        $defaultAddress = $user->addresses()->first();
+
+        $order = new static();
+        $order->user_id = $user->id;
+        $order->setBillingAddress($defaultAddress);
+        $order->setShippingAddress($defaultAddress);
+        $order->status_id = OrderStatus::whereName('Draft')->first()->id;
+        $order->save();
+
+        return $order;
+    }
+
+    public function setBillingAddress($data)
+    {
+        $this->setAddress('billing', $data);
+    }
+
+    public function setShippingAddress($data)
+    {
+        $this->setAddress('shipping', $data);
+    }
+
+    public function setAddress($address, $data)
+    {
+        $prefix = $address.'_';
+        $fields = ['company', 'line1', 'line2', 'town', 'region', 'postcode', 'country'];
+
+        $this->{$prefix.'name'} = $data->first_name.' '.$data->last_name;
+
+        foreach ($fields as $field) {
+            $this->{$prefix.$field} = $data->$field;
+        }
     }
 
     public function scopeCreatedThisMonth($query)
