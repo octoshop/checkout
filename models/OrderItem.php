@@ -20,7 +20,7 @@ class OrderItem extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['name', 'quantity', 'price', 'subtotal'];
+    protected $fillable = ['basket_row_id', 'name', 'quantity', 'price', 'subtotal'];
 
     /**
      * @var array Validation rules

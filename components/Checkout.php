@@ -3,6 +3,7 @@
 use Auth;
 use Cart;
 use Event;
+use Session;
 use Backend\Models\BrandSetting;
 use Octoshop\Core\Components\ComponentBase;
 use Octoshop\Checkout\Models\Order;
@@ -79,6 +80,7 @@ class Checkout extends ComponentBase
 
         foreach (Cart::content() as $item) {
             $items[] = new OrderItem([
+                'basket_row_id' => $item->rowId,
                 'name' => $item->name,
                 'quantity' => $item->qty,
                 'price' => $item->price,
@@ -100,7 +102,11 @@ class Checkout extends ComponentBase
 
         Event::fire('octoshop.checkoutProcess', [$this]);
 
-        if (!$this->canContinue) {
+        if (!$this->canContinue || !$this->updateOrder()) {
+            if ($this->canContinue) {
+                $this->abortReason = "Failed to save order details";
+            }
+
             // set error to flash or return it or something
             Event::fire('octoshop.checkoutFailure', [$this]);
         }
@@ -112,6 +118,19 @@ class Checkout extends ComponentBase
         $this->sendConfirmations();
 
         Cart::destroy();
+    }
+
+    protected function updateOrder()
+    {
+        if (!post('billing_address')) {
+            $this->order->setBillingAddress(post());
+        }
+
+        if (!post('shipping_address')) {
+            $this->order->setShippingAddress(post());
+        }
+
+        return $this->order->save();
     }
 
     protected function loadConfirmation()

@@ -93,6 +93,21 @@ class Order extends Model
         }
     }
 
+    public function syncWithCartItem($basketItem)
+    {
+        $searchParam = ['basket_row_id' => $basketItem->rowId];
+        $item = $this->items()->firstOrNew($searchParam);
+
+        $item->fill([
+            'name' => $basketItem->name,
+            'quantity' => $basketItem->qty,
+            'price' => $basketItem->price,
+            'subtotal' => $basketItem->price * $basketItem->qty,
+        ]);
+
+        $item->save();
+    }
+
     public function scopeCreatedThisMonth($query)
     {
         return $query->where('created_at', '>=', Carbon::now()->startOfMonth());

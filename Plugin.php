@@ -3,6 +3,8 @@
 use Backend;
 use Event;
 use Octoshop\Core\Models\ShopSetting;
+use Octoshop\Checkout\Models\Order;
+use Octoshop\Checkout\Models\OrderItem;
 use System\Classes\PluginBase;
 use System\Controllers\Settings;
 
@@ -28,6 +30,8 @@ class Plugin extends PluginBase
 
         $this->extendComponents();
         $this->extendModels();
+
+        $this->handleOrderEvents();
     }
 
     protected function extendBackendForm()
@@ -123,6 +127,41 @@ class Plugin extends PluginBase
                     json_encode($model->value)
                 ));
             });
+        });
+    }
+
+    protected function handleOrderEvents()
+    {
+        Event::listen('cart.added', function($item) {
+            if ($order = Order::getFromSession()) {
+                $order->syncWithCartItem($item);
+            }
+        });
+
+        Event::listen('cart.updated', function($item) {
+            if ($order = Order::getFromSession()) {
+                $order->syncWithCartItem($item);
+            }
+        });
+
+        Event::listen('cart.removed', function($item) {
+            $item = OrderItem::whereBasketRowId($item->rowId);
+
+            if ($item = $item->first()) {
+                $item->delete();
+            }
+        });
+
+        Event::listen('octoshop.addressUpdated', function($alias, $address) {
+            if (!$address || !$order = Order::getFromSession()) {
+                return;
+            }
+
+            $method = 'set'.studly_case(str_replace('_address', '', $alias)).'Address';
+
+            $order->$method($address);
+
+            $order->save();
         });
     }
 

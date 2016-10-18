@@ -23,6 +23,7 @@ class CreateOrderTables extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('order_id')->unsigned();
+            $table->string('basket_row_id')->nullable();
             $table->string('name');
             $table->integer('quantity')->default(1);
             $table->decimal('price', 20, 5)->default(0);
