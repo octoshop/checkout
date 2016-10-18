@@ -1,1 +1,14 @@
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item title-value">
+            <h4>All Orders</h4>
+            <p><?= $orderTotal ?></p>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4>Orders this Month</h4>
+            <p class="<?= $orderCountClass ?>"><?= $orderCount ?></p>
+            <p class="description">previous: <?= $orderCountLast ?></p>
+        </div>
+    </div>
+</div>
 <?= $this->listRender() ?>

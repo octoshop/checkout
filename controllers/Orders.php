@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Octoshop\Checkout\Models\Order;
 
 class Orders extends Controller
 {
@@ -20,5 +21,30 @@ class Orders extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Octoshop.Core', 'octoshop', 'orders');
+    }
+
+    public function index()
+    {
+        $this->vars['orderTotal'] = Order::count();
+
+        $this->vars['orderCountClass'] = $this->scoreboardClass(
+            $this->vars['orderCount'] = Order::createdThisMonth()->count(),
+            $this->vars['orderCountLast'] = Order::createdLastMonth()->count()
+        );
+
+        return $this->asExtension('ListController')->index();
+    }
+
+    public function scoreboardClass($oldVal, $newVal)
+    {
+        if ($newVal > $oldVal) {
+            return 'positive';
+        }
+
+        if ($oldVal > $newVal) {
+            return 'negative';
+        }
+
+        return '';
     }
 }

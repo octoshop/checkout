@@ -1,6 +1,7 @@
 <?php namespace Octoshop\Checkout\Models;
 
 use Model;
+use Carbon\Carbon;
 
 class Order extends Model
 {
@@ -41,5 +42,18 @@ class Order extends Model
         }
 
         return (new static())->whereHash($hash)->first();
+    }
+
+    public function scopeCreatedThisMonth($query)
+    {
+        return $query->where('created_at', '>=', Carbon::now()->startOfMonth());
+    }
+
+    public function scopeCreatedLastMonth($query)
+    {
+        return $query->whereBetween('created_at', [
+            Carbon::now()->subMonth()->startOfMonth(),
+            Carbon::now()->subMonth()->endOfMonth()
+        ]);
     }
 }

@@ -9,6 +9,44 @@
 
     <?php Block::put('form-contents') ?>
 
+        <div class="scoreboard">
+            <div data-controls="toolbar">
+                <div class="scoreboard-item title-value">
+                    <h4>Order #</h4>
+                    <p><?= $formModel->id ?></p>
+                </div>
+                <div class="scoreboard-item title-value">
+                    <h4>Customer</h4>
+                    <p class="oc-icon-user">
+                        <?= $formModel->user->name ?>
+                        <?= $formModel->user->surname ?>
+                    </p>
+                    <p class="description">
+                        Email:
+                        <a href="mailto:<?= $formModel->user->email ?>">
+                            <?= $formModel->user->email ?>
+                        </a>
+                    </p>
+                </div>
+                <div class="scoreboard-item title-value">
+                    <h4>Total Value</h4>
+                    <p style="color: #95b753;">
+                        <?= Octoshop\Core\Util\Currency::format($formModel->items->sum('subtotal')) ?>
+                    </p>
+                    <p class="description">
+                        for <?= $formModel->items->sum('quantity') ?> items
+                    </p>
+                </div>
+                <div class="scoreboard-item title-value">
+                    <h4>Date Placed</h4>
+                    <p><?= $formModel->created_at->format("H:i d/m/Y") ?></p>
+                    <p class="description">
+                        Updated <?= $formModel->updated_at->format("H:i d/m/Y") ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <?= Form::open() ?>
             <?= $this->formRender() ?>
         <?= Form::close() ?>
