@@ -1,0 +1,16 @@
+fields:
+    name:
+        label: Name
+        required: true
+    quantity:
+        label: Quantity
+        type: number
+        required: true
+    price:
+        label: Unit price
+        type: number
+        required: true
+    subtotal:
+        label: Line price
+        type: number
+        required: true

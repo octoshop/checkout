@@ -22,6 +22,9 @@ class Order extends Model
     /**
      * @var array Relations
      */
+    public $hasMany = [
+        'items' => 'Octoshop\Checkout\Models\OrderItem',
+    ];
     public $belongsTo = [
         'user' => 'RainLab\User\Models\User',
     ];

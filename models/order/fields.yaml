@@ -1,6 +1,10 @@
 tabs:
     fields:
 
+        items:
+            tab: Items
+            type: partial
+
         shipping_name:
             label: Name
             tab: Shipping Address

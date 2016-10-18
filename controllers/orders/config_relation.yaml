@@ -1,0 +1,7 @@
+items:
+    label: Order Item
+    view:
+        list: $/octoshop/checkout/models/orderitem/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        form: $/octoshop/checkout/models/orderitem/fields.yaml

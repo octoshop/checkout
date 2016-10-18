@@ -1,0 +1,9 @@
+columns:
+    name:
+        label: Product
+    quantity:
+        label: Quantity
+    price:
+        label: Unit Price
+    subtotal:
+        label: Subtotal
