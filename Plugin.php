@@ -23,12 +23,15 @@ class Plugin extends PluginBase
 
     public function boot()
     {
-        Event::listen('octoshop.core.extendComponents', function($plugin) {
-            $plugin->addComponents([
-                'Octoshop\Checkout\Components\Checkout' => 'shopCheckout',
-            ]);
-        });
+        $this->extendBackendForm();
+        $this->extendBackendMenu();
 
+        $this->extendComponents();
+        $this->extendModels();
+    }
+
+    protected function extendBackendForm()
+    {
         Event::listen('backend.form.extendFields', function($form) {
             if (!$form->getController() instanceof Settings
              || !$form->model instanceof ShopSetting) {
@@ -36,25 +39,6 @@ class Plugin extends PluginBase
             }
 
             $form->addTabFields($this->getShopSettings());
-        });
-
-        ShopSetting::extend(function($model) {
-            $model->registerDefaults([
-                'checkout' => (object) [
-                    'send_admin_confirmation'    => false,
-                    'send_customer_confirmation' => false,
-                    'recipient_name'  => '',
-                    'recipient_email' => '',
-                ],
-            ]);
-            $model->bindEvent('model.afterFetch', function() use ($model) {
-                $model->value = (object) json_decode(str_replace(
-                    ['"0"', '"1"'],
-                    ['false', 'true'],
-                    json_encode($model->value)
-                ));
-            });
-
         });
     }
 
@@ -94,6 +78,52 @@ class Plugin extends PluginBase
                 ],
             ],
         ];
+    }
+
+    public function extendBackendMenu()
+    {
+        Event::listen('backend.menu.extendItems', function($manager) {
+            $manager->addSideMenuItems('Octoshop.Core', 'octoshop', [
+                'orders' => [
+                    'label'       => 'Orders',
+                    'url'         => Backend::url('octoshop/checkout/orders'),
+                    'icon'        => 'icon-gavel',
+                    'order'       => 300,
+                ],
+            ]);
+        });
+    }
+
+    public function extendComponents()
+    {
+        Event::listen('octoshop.core.extendComponents', function($plugin) {
+            $plugin->addComponents([
+                'Octoshop\Checkout\Components\Checkout' => 'shopCheckout',
+            ]);
+        });
+    }
+
+    protected function extendModels()
+    {
+        ShopSetting::extend(function($model) {
+            $model->registerDefaults([
+                'checkout' => (object) [
+                    'send_admin_confirmation'    => false,
+                    'send_customer_confirmation' => false,
+                    'recipient_name'  => '',
+                    'recipient_email' => '',
+                ],
+            ]);
+
+            // TODO: Pretty sure there's a bool transformer trait we can use here
+            $model->bindEvent('model.afterFetch', function() use ($model) {
+                $model->value = (object) json_decode(str_replace(
+                    ['"0"', '"1"'],
+                    ['false', 'true'],
+                    json_encode($model->value)
+                ));
+            });
+        });
     }
 
     public function registerMailTemplates()
