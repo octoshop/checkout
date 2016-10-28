@@ -59,13 +59,15 @@ class Order extends Model
 
     public static function createForUser(User $user)
     {
-        $defaultAddress = $user->addresses()->first();
-
         $order = new static();
         $order->user_id = $user->id;
-        $order->setBillingAddress($defaultAddress);
-        $order->setShippingAddress($defaultAddress);
         $order->status_id = OrderStatus::whereName('Draft')->first()->id;
+
+        if ($defaultAddress = $user->addresses()->first()) {
+            $order->setBillingAddress($defaultAddress);
+            $order->setShippingAddress($defaultAddress);
+        }
+
         $order->save();
 
         return $order;
