@@ -1,18 +1,75 @@
-subject = "An order's been placed. Time to ship!"
+subject = "Details for order #{{ order.id }}"
 ==
 Hi {{ name }},
 
 An order has been placed for {{ items|length }} item{% if items|length != 1 %}s{% endif %} from your website, the details of which are as follows:
 
 <h3>Customer Information</h3>
-Name: {{ customer_name }}
-Email: {{ customer_email }}
+<p>
+    <strong>Name:</strong>
+    {{ order.user.name }} {{ order.user.surname }}
+</p>
+<p>
+    <strong>Email:</strong>
+    {{ order.user.email }}
+</p>
 <small>Hint - you can contact the customer by hitting reply.</small>
 
-<h3>Order Items</h3>
-{% for item in items %}
-{{ item.qty }} x {{ item.name }} @ {{ item.price|currency }}
-{% endfor %}
-Order total: {{ total|currency }}
+<table>
+    <tr>
+        <td>
+            <h4>Billing Address</h4>
 
-Thanks for using Octoshop!
+            <p>
+                {{ order.billing_name }}<br>
+                {{ order.billing_line1 }}<br>
+                {{ order.billing_line2 }}<br>
+                {{ order.billing_town }}<br>
+                {{ order.billing_region }}<br>
+                {{ order.billing_postcode }}<br>
+                {{ Order.billing_country }}
+            </p>
+        </td>
+        <td>
+            <h4>Shipping Address</h4>
+
+            <p>
+                {{ order.shipping_name }}<br>
+                {{ order.shipping_line1 }}<br>
+                {{ order.shipping_line2 }}<br>
+                {{ order.shipping_town }}<br>
+                {{ order.shipping_region }}<br>
+                {{ order.shipping_postcode }}<br>
+                {{ Order.shipping_country }}
+            </p>
+        </td>
+    </tr>
+</table>
+
+<h3>Order Items</h3>
+<table>
+    <thead>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Qty.</th>
+        <th>Subtotal</th>
+    </thead>
+    <tbody>
+        {% for item in order.items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price|currency }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.subtotal|currency }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3" class="text-right">Total:</th>
+            <td>{{ total|currency }}</td>
+        </tr>
+    </tfoot>
+</table>
+
+<em>Thanks for using Octoshop!</em>

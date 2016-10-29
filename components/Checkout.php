@@ -133,6 +133,9 @@ class Checkout extends ComponentBase
         return $this->order->save();
     }
 
+    /**
+     * @todo Update total to use Order model instead of Cart
+     */
     protected function loadConfirmation()
     {
         if (!$this->sendAdminConfirmation && !$this->sendCustomerConfirmation) {
@@ -142,19 +145,15 @@ class Checkout extends ComponentBase
         $this->confirmation = new Confirmation;
         $customer = Auth::getUser();
 
+
         $this->confirmation->with('global', [
-            'site' => BrandSetting::get('app_name'),
-            'items' => Cart::content()->toArray(),
+            'site'  => BrandSetting::get('app_name'),
+            'order' => $this->order,
             'total' => Cart::total(),
         ])->with('admin', [
-            'name' => $this->recipientName,
+            'name'  => $this->recipientName,
             'email' => $this->recipientEmail,
-            'customer_name' => $customer->name.' '.$customer->surname,
-            'customer_email' => Auth::getUser()->email,
         ])->with('customer', [
-            'name' => $customer->name,
-            'email' => $customer->email,
-            'fullname' => $customer->name.' '.$customer->surname,
         ]);
     }
 
