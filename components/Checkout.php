@@ -13,6 +13,8 @@ use Octoshop\Core\Models\ShopSetting;
 
 class Checkout extends ComponentBase
 {
+    protected $config;
+
     public $items;
 
     protected $canContinue = true;
@@ -26,6 +28,17 @@ class Checkout extends ComponentBase
     protected $recipientName;
 
     protected $recipientEmail;
+
+    /**
+     * Load checkout config
+     *
+     * @todo Add support for guest checkout
+     */
+    public function init()
+    {
+        $this->config = (object) ShopSetting::get('checkout');
+        $this->config->guestCanCheckout = false;
+    }
 
     public function componentDetails()
     {
@@ -42,18 +55,22 @@ class Checkout extends ComponentBase
 
     public function prepareVars()
     {
-        $this->config = $config = (object) ShopSetting::instance()->checkout;
-
-        $this->sendAdminConfirmation = $config->send_admin_confirmation;
-        $this->sendCustomerConfirmation = $config->send_customer_confirmation;
-        $this->recipientName = $config->recipient_name;
-        $this->recipientEmail = $config->recipient_email;
+        $this->sendAdminConfirmation = $this->config->send_admin_confirmation;
+        $this->sendCustomerConfirmation = $this->config->send_customer_confirmation;
+        $this->recipientName = $this->config->recipient_name;
+        $this->recipientEmail = $this->config->recipient_email;
 
         $this->loadOrder();
     }
 
     public function onRun()
     {
+        if (!Auth::getUser() && !$this->config->guestCanCheckout) {
+            // An exception would be nice here, but it blocks
+            // the RainLab.User plugin from redirecting to login
+            return;
+        }
+
         $this->prepareVars();
 
         Event::fire('octoshop.checkoutInit', [$this]);
