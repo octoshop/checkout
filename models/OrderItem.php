@@ -28,8 +28,8 @@ class OrderItem extends Model
     protected $rules = [
         'name' => ['required', 'between:4,255'],
         'quantity' => ['required', 'numeric', 'between:1,1000000'],
-        'price' => ['required', 'numeric', 'between:1,1000000'],
-        'subtotal' => ['required', 'numeric', 'between:1,1000000'],
+        'price' => ['required', 'numeric', 'between:0,1000000'],
+        'subtotal' => ['required', 'numeric', 'between:0,1000000'],
     ];
 
     /**
