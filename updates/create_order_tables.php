@@ -11,11 +11,12 @@ class CreateOrderTables extends Migration
         Schema::create('octoshop_orders', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('hash', 36)->unique();
-            $table->integer('user_id')->unsigned();
+            $table->binary('uuid', 16)->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('status_id')->unsigned()->default(1);
             $this->addAddressCols($table, 'billing');
             $this->addAddressCols($table, 'shipping');
+            $table->decimal('total', 20, 5)->default(0);
             $table->timestamps();
         });
 

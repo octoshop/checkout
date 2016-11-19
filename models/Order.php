@@ -8,6 +8,8 @@ use RainLab\User\Models\User;
 
 class Order extends Model
 {
+    use \Octoshop\Core\Traits\Uuidable;
+
     /**
      * @var string The database table used by the model.
      */
@@ -34,27 +36,13 @@ class Order extends Model
         'status' => 'Octoshop\Checkout\Models\OrderStatus',
     ];
 
-    public function beforeCreate()
-    {
-        $this->hash = str_random(36);
-    }
-
     public static function getFromSession()
     {
-        if (!Session::has('orderHash')) {
+        if (!Session::has('order')) {
             return;
         }
 
-        return static::findByHash(Session::get('orderHash'));
-    }
-
-    public static function findByHash($hash)
-    {
-        if (!$hash) {
-            return;
-        }
-
-        return (new static())->whereHash($hash)->first();
+        return static::findByUuid(Session::get('order'));
     }
 
     public static function createForUser(User $user)
