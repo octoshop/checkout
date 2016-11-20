@@ -73,13 +73,21 @@ class Order extends Model
 
     public function setAddress($address, $data)
     {
+        if (is_array($data)) {
+            $data = (object) $data;
+        }
+
         $prefix = $address.'_';
         $fields = ['company', 'line1', 'line2', 'town', 'region', 'postcode', 'country'];
 
-        $this->{$prefix.'name'} = $data->first_name.' '.$data->last_name;
+        $this->{$prefix.'name'} = sprintf(
+            "%s %s",
+            $data->{$prefix.'first_name'},
+            $data->{$prefix.'last_name'}
+        );
 
         foreach ($fields as $field) {
-            $this->{$prefix.$field} = $data->$field;
+            $this->{$prefix.$field} = $data->{$prefix.$field};
         }
     }
 

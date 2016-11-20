@@ -5,9 +5,11 @@ use Cart;
 use Event;
 use Session;
 use Backend\Models\BrandSetting;
+use Octoshop\AddressBook\Models\Address;
 use Octoshop\Core\Components\ComponentBase;
 use Octoshop\Checkout\Models\Order;
 use Octoshop\Checkout\Models\OrderItem;
+use Octoshop\Checkout\Models\OrderStatus;
 use Octoshop\Core\Checkout\Confirmation;
 use Octoshop\Core\Models\ShopSetting;
 
@@ -15,29 +17,20 @@ class Checkout extends ComponentBase
 {
     protected $config;
 
-    public $items;
-
-    protected $canContinue = true;
-
-    protected $confirmation;
-
-    protected $sendAdminConfirmation;
-
-    protected $sendCustomerConfirmation;
-
-    protected $recipientName;
-
-    protected $recipientEmail;
+    protected $user;
 
     /**
-     * Load checkout config
-     *
-     * @todo Add support for guest checkout
+     * @var array Custom checkout fields to save
      */
+    protected $userFields = ['notes' => 'notes'];
+
+    protected $order;
+
     public function init()
     {
         $this->config = (object) ShopSetting::get('checkout');
-        $this->config->guestCanCheckout = false;
+
+        $this->user = Auth::getUser();
     }
 
     public function componentDetails()
@@ -53,50 +46,42 @@ class Checkout extends ComponentBase
         return [];
     }
 
-    public function prepareVars()
+    public function onRun() // or init?
     {
-        $this->sendAdminConfirmation = $this->config->send_admin_confirmation;
-        $this->sendCustomerConfirmation = $this->config->send_customer_confirmation;
-        $this->recipientName = $this->config->recipient_name;
-        $this->recipientEmail = $this->config->recipient_email;
-
-        $this->loadOrder();
-    }
-
-    public function onRun()
-    {
-        if (!Auth::getUser() && !$this->config->guestCanCheckout) {
+        if (!$this->user) {
             // An exception would be nice here, but it blocks
             // the RainLab.User plugin from redirecting to login
             return;
         }
 
         $this->prepareVars();
-
-        Event::fire('octoshop.checkoutInit', [$this]);
-
-        if (!$this->canContinue) {
-            // set error to flash or return it or whatever
-        }
-
-        $this->items = Cart::content();
     }
 
-    protected function loadOrder($order = null)
+    public function prepareVars()
+    {
+        $this->setPageProp('order', $this->loadOrder());
+    }
+
+    protected function loadOrder()
     {
         if ($this->order instanceof Order) {
-            return;
+            return $this->order;
         }
 
-        $this->setPageProp('order', Order::getFromSession() ?: $this->createOrder());
+        if ($order = Order::getFromSession()) {
+            return $order;
+        }
+
+        return $this->createOrder();
     }
 
     protected function createOrder()
     {
-        $items = [];
+        $basketItems = Cart::content();
+        $orderItems = [];
 
-        foreach (Cart::content() as $item) {
-            $items[] = new OrderItem([
+        foreach ($basketItems as $item) {
+            $orderItems[] = new OrderItem([
                 'basket_row_id' => $item->rowId,
                 'name' => $item->name,
                 'quantity' => $item->qty,
@@ -106,90 +91,40 @@ class Checkout extends ComponentBase
         }
 
         $order = Order::createForUser(Auth::getUser());
-        $order->items()->saveMany($items);
+        $order->items()->saveMany($orderItems);
 
-        Session::put('orderHash', $order->hash);
+        Session::put('order', $order->uuid->string);
 
         return $order;
     }
 
-    public function onCheckout()
+    public function onSetOrderDetails()
     {
         $this->prepareVars();
 
-        Event::fire('octoshop.checkoutProcess', [$this]);
+        $data = Address::find(post('billing_address')) ?: post();
+        $this->order->setBillingAddress($data);
 
-        if (!$this->canContinue || !$this->updateOrder()) {
-            if ($this->canContinue) {
-                $this->abortReason = "Failed to save order details";
+        $data = Address::find(post('shipping_address')) ?: post();
+        $this->order->setShippingAddress($data);
+
+        foreach ($this->userFields as $field => $column) {
+            if (!($value = post($field))) {
+                continue;
             }
 
-            // set error to flash or return it or something
-            Event::fire('octoshop.checkoutFailure', [$this]);
+            $this->order->$column = $value;
         }
 
-        $this->loadConfirmation();
-
-        Event::fire('octoshop.checkoutSuccess', [$this]);
-
-        $this->sendConfirmations();
-
-        Cart::destroy();
+        $this->order->save();
     }
 
-    protected function updateOrder()
+    public function onConfirm()
     {
-        if (!post('billing_address')) {
-            $this->order->setBillingAddress(post());
-        }
+        $this->prepareVars();
 
-        if (!post('shipping_address')) {
-            $this->order->setShippingAddress(post());
-        }
-
-        return $this->order->save();
-    }
-
-    /**
-     * @todo Update total to use Order model instead of Cart
-     */
-    protected function loadConfirmation()
-    {
-        if (!$this->sendAdminConfirmation && !$this->sendCustomerConfirmation) {
-            return;
-        }
-
-        $this->confirmation = new Confirmation;
-        $customer = Auth::getUser();
-
-
-        $this->confirmation->with('global', [
-            'site'  => BrandSetting::get('app_name'),
-            'order' => $this->order,
-            'total' => Cart::total(),
-        ])->with('admin', [
-            'name'  => $this->recipientName,
-            'email' => $this->recipientEmail,
-        ])->with('customer', [
-        ]);
-    }
-
-    protected function sendConfirmations()
-    {
-        if ($this->sendAdminConfirmation) {
-            $this->confirmation->forGroup('admin') ->send();
-        }
-
-        if ($this->sendCustomerConfirmation) {
-            $this->confirmation ->forGroup('customer')->send();
-        }
-    }
-
-    public function abort($reason)
-    {
-        $this->canContinue = false;
-        $this->abortReason = $reason;
-
-        return false;
+        $pending = OrderStatus::whereName('Pending')->first();
+        $this->order->status()->associate($pending);
+        $this->order->save();
     }
 }

@@ -14,9 +14,10 @@ class CreateOrderTables extends Migration
             $table->binary('uuid', 16)->nullable();
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('status_id')->unsigned()->default(1);
+            $table->decimal('total', 20, 5)->default(0);
             $this->addAddressCols($table, 'billing');
             $this->addAddressCols($table, 'shipping');
-            $table->decimal('total', 20, 5)->default(0);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
 

@@ -151,18 +151,6 @@ class Plugin extends PluginBase
                 $item->delete();
             }
         });
-
-        Event::listen('octoshop.addressUpdated', function($alias, $address) {
-            if (!$address || !$order = Order::getFromSession()) {
-                return;
-            }
-
-            $method = 'set'.studly_case(str_replace('_address', '', $alias)).'Address';
-
-            $order->$method($address);
-
-            $order->save();
-        });
     }
 
     public function registerMailTemplates()
