@@ -4,7 +4,9 @@ use Auth;
 use Cart;
 use Event;
 use Session;
+use Validator;
 use Backend\Models\BrandSetting;
+use October\Rain\Exception\ValidationException;
 use Octoshop\AddressBook\Models\Address;
 use Octoshop\Core\Components\ComponentBase;
 use Octoshop\Checkout\Models\Order;
@@ -102,11 +104,15 @@ class Checkout extends ComponentBase
     {
         $this->prepareVars();
 
+        $rules = [];
+
         $data = Address::find(post('billing_address')) ?: post();
         $this->order->setBillingAddress($data);
+        $rules += Address::getValidationRules('billing');
 
         $data = Address::find(post('shipping_address')) ?: post();
         $this->order->setShippingAddress($data);
+        $rules += Address::getValidationRules('shipping');
 
         foreach ($this->userFields as $field => $column) {
             if (!($value = post($field))) {
@@ -114,6 +120,12 @@ class Checkout extends ComponentBase
             }
 
             $this->order->$column = $value;
+        }
+
+        $validator = Validator::make($this->order->toArray(), $rules);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
         }
 
         $this->order->save();
