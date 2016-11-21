@@ -3,6 +3,7 @@
 use Model;
 use Session;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Octoshop\Checkout\Models\OrderStatus;
 use RainLab\User\Models\User;
 
@@ -42,7 +43,12 @@ class Order extends Model
             return;
         }
 
-        return static::findByUuid(Session::get('order'));
+        try {
+            return static::findByUuid(Session::get('order'));
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
+
     }
 
     public static function createForUser(User $user)
