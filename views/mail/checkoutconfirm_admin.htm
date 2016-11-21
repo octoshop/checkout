@@ -21,7 +21,8 @@ An order has been placed for {{ items|length }} item{% if items|length != 1 %}s{
             <h4>Billing Address</h4>
 
             <p>
-                {{ order.billing_name }}<br>
+                {{ order.billing_first_name }}<br>
+                {{ order.billing_last_name }}<br>
                 {{ order.billing_line1 }}<br>
                 {{ order.billing_line2 }}<br>
                 {{ order.billing_town }}<br>
@@ -34,7 +35,8 @@ An order has been placed for {{ items|length }} item{% if items|length != 1 %}s{
             <h4>Shipping Address</h4>
 
             <p>
-                {{ order.shipping_name }}<br>
+                {{ order.shipping_first_name }}<br>
+                {{ order.shipping_last_name }}<br>
                 {{ order.shipping_line1 }}<br>
                 {{ order.shipping_line2 }}<br>
                 {{ order.shipping_town }}<br>

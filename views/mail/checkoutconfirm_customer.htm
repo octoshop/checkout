@@ -33,7 +33,8 @@ You recently placed an order for {{ order.items|length }} item{% if order.items|
 <h3>We'll deliver your order to:</h3>
 
 <p>
-    {{ order.shipping_name }}<br>
+    {{ order.shipping_first_name }}<br>
+    {{ order.shipping_last_name }}<br>
     {{ order.shipping_line1 }}<br>
     {{ order.shipping_line2 }}<br>
     {{ order.shipping_town }}<br>

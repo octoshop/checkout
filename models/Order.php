@@ -84,13 +84,7 @@ class Order extends Model
         }
 
         $prefix = $address.'_';
-        $fields = ['company', 'line1', 'line2', 'town', 'region', 'postcode', 'country'];
-
-        $this->{$prefix.'name'} = sprintf(
-            "%s %s",
-            $data->{$prefix.'first_name'},
-            $data->{$prefix.'last_name'}
-        );
+        $fields = ['first_name', 'last_name', 'company', 'line1', 'line2', 'town', 'region', 'postcode', 'country'];
 
         foreach ($fields as $field) {
             $this->{$prefix.$field} = $data->{$prefix.$field};

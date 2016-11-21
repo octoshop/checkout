@@ -43,7 +43,8 @@ class CreateOrderTables extends Migration
 
     protected function addAddressCols(&$table, $type)
     {
-        $table->string($type.'_name')->nullable();
+        $table->string($type.'_first_name')->nullable();
+        $table->string($type.'_last_name')->nullable();
         $table->string($type.'_company')->nullable();
         $table->string($type.'_line1')->nullable();
         $table->string($type.'_line2')->nullable();

@@ -2,8 +2,11 @@ columns:
     id:
         label: ID
         searchable: true
-    shipping_name:
+    shipping_first_name:
         label: Name
+        searchable: true
+    shipping_last_name:
+        label: Surname
         searchable: true
     shipping_street:
         label: Street

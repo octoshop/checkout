@@ -5,9 +5,14 @@ tabs:
             tab: Items
             type: partial
 
-        shipping_name:
+        shipping_first_name:
             label: Name
             tab: Shipping Address
+            span: left
+        shipping_last_name:
+            label: Surname
+            tab: Shipping Address
+            span: right
         shipping_line1:
             label: Address Line 1
             tab: Shipping Address
@@ -27,9 +32,14 @@ tabs:
             label: Country
             tab: Shipping Address
 
-        billing_name:
+        billing_first_name:
             label: Name
             tab: Billing Address
+            span: left
+        billing_last_name:
+            label: Surname
+            tab: Billing Address
+            span: right
         billing_line1:
             label: Address Line 1
             tab: Billing Address
