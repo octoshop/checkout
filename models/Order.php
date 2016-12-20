@@ -48,7 +48,6 @@ class Order extends Model
         } catch (ModelNotFoundException $e) {
             return false;
         }
-
     }
 
     public static function createForUser(User $user)
@@ -87,7 +86,11 @@ class Order extends Model
         $fields = ['first_name', 'last_name', 'company', 'line1', 'line2', 'town', 'region', 'postcode', 'country'];
 
         foreach ($fields as $field) {
-            $this->{$prefix.$field} = $data->{$prefix.$field};
+            $field = $prefix.$field;
+
+            if (isset($data->$field) && !empty(trim($data->$field))) {
+                $this->$field = $data->$field;
+            }
         }
     }
 
