@@ -128,6 +128,12 @@ class Checkout extends ComponentBase
             throw new ValidationException($validator);
         }
 
+        $basketErrors = Cart::validate();
+
+        if (count($basketErrors) > 0) {
+            throw new ValidationException($basketErrors);
+        }
+
         $this->order->save();
     }
 
@@ -135,8 +141,17 @@ class Checkout extends ComponentBase
     {
         $this->prepareVars();
 
+        $basketErrors = Cart::validate();
+
+        if (count($basketErrors) > 0) {
+            throw new ValidationException($basketErrors);
+        }
+
         $pending = OrderStatus::whereName('Pending')->first();
         $this->order->status()->associate($pending);
         $this->order->save();
+
+        Session::forget('order');
+        Cart::destroy();
     }
 }
