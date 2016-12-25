@@ -1,4 +1,4 @@
-<?php namespace Octoshop\Core\Checkout;
+<?php namespace Octoshop\Checkout;
 
 use Mail;
 
@@ -21,8 +21,8 @@ class Confirmation
         $this->group = $group;
 
         $this->template = $group == 'admin'
-            ? 'octoshop.core::mail.checkoutconfirm_admin'
-            : 'octoshop.core::mail.checkoutconfirm_customer';
+            ? 'octoshop.checkout::mail.checkoutconfirm_admin'
+            : 'octoshop.checkout::mail.checkoutconfirm_customer';
 
         return $this;
     }
@@ -35,11 +35,13 @@ class Confirmation
             function($message) use ($data) {
                 extract($data);
 
+                $customerName = $customer->name.' '.$customer->surname;
+
                 if ($this->group == 'admin') {
                     $message->to($email, $name);
-                    $message->replyTo($customer_email, $customer_name);
+                    $message->replyTo($customer->email, $customerName);
                 } else {
-                    $message->to($email, $fullname);
+                    $message->to($customer->email, $customerName);
                 }
             }
         );

@@ -1,6 +1,6 @@
 subject = "Confirmation of {{ site }} order"
 ==
-Hi {{ order.user.name }},
+Hi {{ customer.name }},
 
 You recently placed an order for {{ order.items|length }} item{% if order.items|length != 1 %}s{% endif %} from our website, the details of which are as follows:
 
@@ -30,24 +30,26 @@ You recently placed an order for {{ order.items|length }} item{% if order.items|
     </tfoot>
 </table>
 
+{% if order.notes %}
+<h4>Your notes:</h4>
+<p>{{ order.notes }}</p>
+{% endif %}
+
 <h3>We'll deliver your order to:</h3>
 
 <p>
-    {{ order.shipping_first_name }}<br>
-    {{ order.shipping_last_name }}<br>
+    {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br>
+    {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
     {{ order.shipping_line1 }}<br>
-    {{ order.shipping_line2 }}<br>
+    {% if order.shipping_line2 %}{{ order.shipping_line2 }}<br>{% endif %}
     {{ order.shipping_town }}<br>
     {{ order.shipping_region }}<br>
     {{ order.shipping_postcode }}<br>
     {{ Order.shipping_country }}
 </p>
 
-<p>
-    Thank you for your order!<br>
-    {{ site }} Team
-</p>
+<p>Alternatively, you can <a href="{{ url('account/orders/' ~ order.uuid) }}">view your order</a> on our website.</p>
 
------
-
-This email was sent automatically by Octoshop, the magic behind {{ site }}. Please do not reply.
+<p>Thank you for your order!<br>{{ site }} Team</p>
+<p>-----</p>
+<p>This email was sent automatically by Octoshop, the magic behind {{ site }}.<br>Please do not reply.</p>

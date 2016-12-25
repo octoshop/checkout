@@ -8,11 +8,11 @@ use Validator;
 use Backend\Models\BrandSetting;
 use October\Rain\Exception\ValidationException;
 use Octoshop\AddressBook\Models\Address;
-use Octoshop\Core\Components\ComponentBase;
+use Octoshop\Checkout\Confirmation;
 use Octoshop\Checkout\Models\Order;
 use Octoshop\Checkout\Models\OrderItem;
 use Octoshop\Checkout\Models\OrderStatus;
-use Octoshop\Core\Checkout\Confirmation;
+use Octoshop\Core\Components\ComponentBase;
 use Octoshop\Core\Models\ShopSetting;
 
 class Checkout extends ComponentBase
@@ -26,8 +26,23 @@ class Checkout extends ComponentBase
      */
     protected $userFields = ['notes' => 'notes'];
 
-    protected $order;
+    public $order;
 
+    protected $confirmation;
+
+    protected $sendAdminConfirmation;
+
+    protected $sendCustomerConfirmation;
+
+    protected $recipientName;
+
+    protected $recipientEmail;
+
+    /**
+     * Load checkout config
+     *
+     * @todo Add support for guest checkout
+     */
     public function init()
     {
         $this->config = (object) ShopSetting::get('checkout');
@@ -61,6 +76,11 @@ class Checkout extends ComponentBase
 
     public function prepareVars()
     {
+        $this->sendAdminConfirmation = $this->config->send_admin_confirmation;
+        $this->sendCustomerConfirmation = $this->config->send_customer_confirmation;
+        $this->recipientName = $this->config->recipient_name;
+        $this->recipientEmail = $this->config->recipient_email;
+
         $this->setPageProp('order', $this->loadOrder());
     }
 
@@ -151,9 +171,49 @@ class Checkout extends ComponentBase
 
         $pending = OrderStatus::whereName('Pending')->first();
         $this->order->status()->associate($pending);
-        $this->order->save();
+
+        if (!$this->order->save()) {
+            throw new ValidationException("Failed to save order.");
+        }
+
+        $this->loadConfirmation();
+
+        Event::fire('octoshop.checkout.success', [$this]);
+
+        $this->sendConfirmations();
 
         Session::forget('order');
         Cart::destroy();
+    }
+
+    protected function loadConfirmation()
+    {
+        if (!$this->sendAdminConfirmation && !$this->sendCustomerConfirmation) {
+            return;
+        }
+
+        $this->confirmation = new Confirmation;
+        $customer = $this->order->user;
+
+        $this->confirmation->with('global', [
+            'site'  => BrandSetting::get('app_name'),
+            'order' => $this->order,
+            'customer' => $customer,
+        ])->with('admin', [
+            'name'  => $this->recipientName,
+            'email' => $this->recipientEmail,
+        ])->with('customer', [
+        ]);
+    }
+
+    protected function sendConfirmations()
+    {
+        if ($this->sendAdminConfirmation) {
+            $this->confirmation->forGroup('admin') ->send();
+        }
+
+        if ($this->sendCustomerConfirmation) {
+            $this->confirmation->forGroup('customer')->send();
+        }
     }
 }

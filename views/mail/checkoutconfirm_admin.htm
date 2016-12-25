@@ -7,11 +7,11 @@ An order has been placed for {{ order.items|length }} item{% if order.items|leng
 <h3>Customer Information</h3>
 <p>
     <strong>Name:</strong>
-    {{ order.user.name }} {{ order.user.surname }}
+    {{ customer.name }} {{ customer.surname }}
 </p>
 <p>
     <strong>Email:</strong>
-    {{ order.user.email }}
+    {{ customer.email }}
 </p>
 <small>Hint - you can contact the customer by hitting reply.</small>
 
@@ -21,10 +21,10 @@ An order has been placed for {{ order.items|length }} item{% if order.items|leng
             <h4>Billing Address</h4>
 
             <p>
-                {{ order.billing_first_name }}<br>
-                {{ order.billing_last_name }}<br>
+                {{ order.billing_first_name }} {{ order.billing_last_name }}<br>
+                {% if order.billing_company %}{{ order.billing_company }}<br>{% endif %}
                 {{ order.billing_line1 }}<br>
-                {{ order.billing_line2 }}<br>
+                {% if order.billing_line2 %}{{ order.billing_line2 }}<br>{% endif %}
                 {{ order.billing_town }}<br>
                 {{ order.billing_region }}<br>
                 {{ order.billing_postcode }}<br>
@@ -35,10 +35,10 @@ An order has been placed for {{ order.items|length }} item{% if order.items|leng
             <h4>Shipping Address</h4>
 
             <p>
-                {{ order.shipping_first_name }}<br>
-                {{ order.shipping_last_name }}<br>
+                {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br>
+                {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
                 {{ order.shipping_line1 }}<br>
-                {{ order.shipping_line2 }}<br>
+                {% if order.shipping_line2 %}{{ order.shipping_line2 }}<br>{% endif %}
                 {{ order.shipping_town }}<br>
                 {{ order.shipping_region }}<br>
                 {{ order.shipping_postcode }}<br>
@@ -73,5 +73,12 @@ An order has been placed for {{ order.items|length }} item{% if order.items|leng
         </tr>
     </tfoot>
 </table>
+
+{% if order.notes %}
+<h4>Customer Notes</h4>
+<p>{{ order.notes }}</p>
+{% endif %}
+
+<p><a href="{{ url('backend/octoshop/checkout/orders/update/' ~ order.id) }}">Manage order in backend</a></p>
 
 <em>Thanks for using Octoshop!</em>
