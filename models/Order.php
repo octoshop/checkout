@@ -121,4 +121,9 @@ class Order extends Model
             Carbon::now()->subMonth()->endOfMonth()
         ]);
     }
+
+    public function getTotalAttribute($value)
+    {
+        return $this->items->sum('subtotal');
+    }
 }

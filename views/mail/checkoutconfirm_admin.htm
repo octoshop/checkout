@@ -2,7 +2,7 @@ subject = "Details for order #{{ order.id }}"
 ==
 Hi {{ name }},
 
-An order has been placed for {{ items|length }} item{% if items|length != 1 %}s{% endif %} from your website, the details of which are as follows:
+An order has been placed for {{ order.items|length }} item{% if order.items|length != 1 %}s{% endif %} from your website. Here are the details:
 
 <h3>Customer Information</h3>
 <p>
@@ -69,7 +69,7 @@ An order has been placed for {{ items|length }} item{% if items|length != 1 %}s{
     <tfoot>
         <tr>
             <th colspan="3" class="text-right">Total:</th>
-            <td>{{ total|currency }}</td>
+            <td>{{ order.total|currency }}</td>
         </tr>
     </tfoot>
 </table>

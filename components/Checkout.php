@@ -95,6 +95,8 @@ class Checkout extends ComponentBase
         $order = Order::createForUser(Auth::getUser());
         $order->items()->saveMany($orderItems);
 
+        $order->total = Cart::total();
+
         Session::put('order', $order->uuid->string);
 
         return $order;
