@@ -156,8 +156,8 @@ class Plugin extends PluginBase
     public function registerMailTemplates()
     {
         return [
-            'octoshop.core::mail.checkoutconfirm_admin' => 'Order confirmation sent to admin users',
-            'octoshop.core::mail.checkoutconfirm_customer' => 'Order confirmation sent to customers',
+            'octoshop.checkout::mail.checkoutconfirm_admin' => 'Order confirmation sent to admin users',
+            'octoshop.checkout::mail.checkoutconfirm_customer' => 'Order confirmation sent to customers',
         ];
     }
 }
