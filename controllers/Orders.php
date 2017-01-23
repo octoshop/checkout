@@ -16,6 +16,8 @@ class Orders extends Controller
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
 
+    public $requiredPermissions = ['octoshop.core.access_orders'];
+
     public function __construct()
     {
         parent::__construct();

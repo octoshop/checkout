@@ -23,6 +23,16 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerPermissions()
+    {
+        return [
+            'octoshop.core.access_orders' => [
+                'tab' => 'octoshop.core::lang.plugin.name',
+                'label' => 'octoshop.checkout::lang.permissions.orders',
+            ],
+        ];
+    }
+
     public function boot()
     {
         $this->extendBackendForm();
@@ -93,6 +103,7 @@ class Plugin extends PluginBase
                     'url'         => Backend::url('octoshop/checkout/orders'),
                     'icon'        => 'icon-gavel',
                     'order'       => 300,
+                    'permissions' => ['octoshop.core.access_orders'],
                 ],
             ]);
         });
