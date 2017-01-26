@@ -1,5 +1,5 @@
 # Record name
-name: Order
+name: octoshop.checkout::lang.order.label
 
 # Model Form Field configuration
 form: $/octoshop/checkout/models/order/fields.yaml
@@ -12,12 +12,12 @@ defaultRedirect: octoshop/checkout/orders
 
 # Create page
 create:
-    title: Create Order
+    title: backend::lang.form.create_title
     redirect: octoshop/checkout/orders/update/:id
     redirectClose: octoshop/checkout/orders
 
 # Update page
 update:
-    title: Edit Order
+    title: backend::lang.form.update_title
     redirect: octoshop/checkout/orders
     redirectClose: octoshop/checkout/orders

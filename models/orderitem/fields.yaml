@@ -1,16 +1,16 @@
 fields:
     name:
-        label: Name
+        label: octoshop.checkout::lang.orderitem.name
         required: true
     quantity:
-        label: Quantity
+        label: octoshop.checkout::lang.orderitem.quantity
         type: number
         required: true
     price:
-        label: Unit price
+        label: octoshop.checkout::lang.orderitem.price
         type: number
         required: true
     subtotal:
-        label: Line price
+        label: octoshop.checkout::lang.orderitem.subtotal
         type: number
         required: true

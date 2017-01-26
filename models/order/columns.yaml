@@ -1,39 +1,39 @@
 columns:
     id:
-        label: ID
+        label: octoshop.checkout::lang.order.id
         searchable: true
     shipping_first_name:
-        label: Name
+        label: octoshop.checkout::lang.order.address.first_name
         searchable: true
     shipping_last_name:
-        label: Surname
+        label: octoshop.checkout::lang.order.address.last_name
         searchable: true
-    shipping_street:
-        label: Street
+    shipping_line1:
+        label: octoshop.checkout::lang.order.address.line1
         searchable: true
         invisible: true
     shipping_town:
-        label: Town
+        label: octoshop.checkout::lang.order.address.town
         searchable: true
     shipping_county:
-        label: County
+        label: octoshop.checkout::lang.order.address.region
         searchable: true
         invisible: true
     shipping_postcode:
-        label: Post Code
+        label: octoshop.checkout::lang.order.address.postcode
         searchable: true
         invisible: true
     shipping_country:
-        label: Country
+        label: octoshop.checkout::lang.order.address.country
         searchable: true
     status:
-        label: Status
+        label: octoshop.checkout::lang.order.status
         relation: status
         select: name
     created_at:
-        label: Date Placed
+        label: octoshop.checkout::lang.order.created_at
         searchable: true
     updated_at:
-        label: Last Updated
+        label: octoshop.checkout::lang.order.updated_at
         searchable: true
         invisible: true

@@ -4,20 +4,22 @@
             <ul>
                 <?php foreach ($statusCounts as $status): ?>
                 <li data-color="<?= $status->colour ?>">
-                    <?= $status->name ?>
+                    <?= e(trans('octoshop.checkout::lang.orderstatus.'.strtolower($status->name))) ?>
                     <span><?= $status->count ?></span>
                 </li>
                 <?php endforeach ?>
             </ul>
         </div>
         <div class="scoreboard-item title-value">
-            <h4>All Orders</h4>
+            <h4><?= e(trans('octoshop.checkout::lang.orders.all_orders')) ?></h4>
             <p><?= $orderTotal ?></p>
         </div>
         <div class="scoreboard-item title-value">
-            <h4>Orders this Month</h4>
+            <h4><?= e(trans('octoshop.checkout::lang.orders.this_month')) ?></h4>
             <p class="<?= $orderCountClass ?>"><?= $orderCount ?></p>
-            <p class="description">previous: <?= $orderCountLast ?></p>
+            <p class="description">
+                <?= e(trans('octoshop.checkout::lang.orders.previous')) ?>: <?= $orderCountLast ?>
+            </p>
         </div>
     </div>
 </div>

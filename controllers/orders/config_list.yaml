@@ -8,7 +8,7 @@ filter: config_filter.yaml
 modelClass: Octoshop\Checkout\Models\Order
 
 # List Title
-title: Manage Orders
+title: octoshop.checkout::lang.orders.manage
 
 # Link URL for each record
 recordUrl: octoshop/checkout/orders/update/:id

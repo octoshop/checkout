@@ -60,21 +60,21 @@ class Plugin extends PluginBase
     {
         return [
             'checkout[send_customer_confirmation]' => [
-                'label' => 'Send confirmation to customer',
+                'label' => 'octoshop.checkout::lang.settings.send_customer_confirmation',
+                'tab' => 'octoshop.checkout::lang.settings.tab',
                 'type' => 'switch',
                 'span' => 'left',
-                'tab' => 'Checkout',
             ],
             'checkout[send_admin_confirmation]' => [
-                'label' => 'Send confirmation to admin',
+                'label' => 'octoshop.checkout::lang.settings.send_admin_confirmation',
+                'tab' => 'octoshop.checkout::lang.settings.tab',
                 'type' => 'switch',
                 'span' => 'right',
-                'tab' => 'Checkout',
             ],
             'checkout[recipient_name]' => [
-                'label' => 'Recipient Name',
+                'label' => 'octoshop.checkout::lang.settings.recipient_name',
+                'tab' => 'octoshop.checkout::lang.settings.tab',
                 'type' => 'text',
-                'tab' => 'Checkout',
                 'trigger' => [
                     'action' => 'show',
                     'condition' => 'checked',
@@ -82,9 +82,9 @@ class Plugin extends PluginBase
                 ],
             ],
             'checkout[recipient_email]' => [
-                'label' => 'Recipient Address',
+                'label' => 'octoshop.checkout::lang.settings.recipient_address',
+                'tab' => 'octoshop.checkout::lang.settings.tab',
                 'type' => 'text',
-                'tab' => 'Checkout',
                 'trigger' => [
                     'action' => 'show',
                     'condition' => 'checked',
@@ -99,7 +99,7 @@ class Plugin extends PluginBase
         Event::listen('backend.menu.extendItems', function($manager) {
             $manager->addSideMenuItems('Octoshop.Core', 'octoshop', [
                 'orders' => [
-                    'label'       => 'Orders',
+                    'label'       => 'octoshop.checkout::lang.orders.label',
                     'url'         => Backend::url('octoshop/checkout/orders'),
                     'icon'        => 'icon-gavel',
                     'order'       => 300,
@@ -167,8 +167,8 @@ class Plugin extends PluginBase
     public function registerMailTemplates()
     {
         return [
-            'octoshop.checkout::mail.checkoutconfirm_admin' => 'Order confirmation sent to admin users',
-            'octoshop.checkout::mail.checkoutconfirm_customer' => 'Order confirmation sent to customers',
+            'octoshop.checkout::mail.checkoutconfirm_admin' => 'octoshop.checkout::lang.mail.admin_confirmation',
+            'octoshop.checkout::mail.checkoutconfirm_customer' => 'octoshop.checkout::lang.mail.customer_confirmation',
         ];
     }
 }

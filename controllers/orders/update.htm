@@ -2,7 +2,11 @@
 
 <?php Block::put('breadcrumb') ?>
     <ul>
-        <li><a href="<?= Backend::url('octoshop/checkout/orders') ?>">Orders</a></li>
+        <li>
+            <a href="<?= Backend::url('octoshop/checkout/orders') ?>">
+                <?= e(trans('octoshop.checkout::lang.orders.label')) ?>
+            </a>
+        </li>
         <li><?= e($this->pageTitle) ?></li>
     </ul>
 <?php Block::endPut() ?>
@@ -14,24 +18,24 @@
         <div class="scoreboard">
             <div data-controls="toolbar">
                 <div class="scoreboard-item title-value">
-                    <h4>Order #</h4>
+                    <h4><?= e(trans('octoshop.checkout::lang.order.id')) ?></h4>
                     <p><?= $formModel->id ?></p>
                 </div>
                 <div class="scoreboard-item title-value">
-                    <h4>Customer</h4>
+                    <h4><?= e(trans('octoshop.checkout::lang.order.customer')) ?></h4>
                     <p class="oc-icon-user">
                         <?= $formModel->user->name ?>
                         <?= $formModel->user->surname ?>
                     </p>
                     <p class="description">
-                        Email:
+                        <?= e(trans('octoshop.checkout::lang.order.email')) ?>:
                         <a href="mailto:<?= $formModel->user->email ?>">
                             <?= $formModel->user->email ?>
                         </a>
                     </p>
                 </div>
                 <div class="scoreboard-item title-value">
-                    <h4>Current Status</h4>
+                    <h4><?= e(trans('octoshop.checkout::lang.order.status')) ?></h4>
                     <p style="color: <?= $formModel->status->colour ?>;">
                         <?= $formModel->status->name ?>
                     </p>
@@ -39,24 +43,27 @@
                 </div>
                 <?php if ($oc->exists('Octoshop.Shipping')): ?>
                 <div class="scoreboard-item title-value">
-                    <h4>Shipping Option</h4>
+                    <h4><?= e(trans('octoshop.checkout::lang.order.shipping_option')) ?></h4>
                     <p><?= $formModel->shipping_option->name ?></p>
                 </div>
                 <?php endif ?>
                 <div class="scoreboard-item title-value">
-                    <h4>Total Value</h4>
+                    <h4><?= e(trans('octoshop.checkout::lang.order.total_value')) ?></h4>
                     <p style="color: #95b753;">
                         <?= Octoshop\Core\Util\Currency::format($formModel->total) ?>
                     </p>
                     <p class="description">
-                        for <?= $formModel->items->sum('quantity') ?> items
+                        <?= sprintf(
+                            \Lang::get('octoshop.checkout::lang.order.for_x_items'),
+                            $formModel->items->sum('quantity')
+                        ) ?>
                     </p>
                 </div>
                 <div class="scoreboard-item title-value">
-                    <h4>Date Placed</h4>
+                    <h4><?= e(trans('octoshop.checkout::lang.order.created_at')) ?></h4>
                     <p><?= $formModel->created_at->format("H:i d/m/Y") ?></p>
                     <p class="description">
-                        Updated <?= $formModel->updated_at->format("H:i d/m/Y") ?>
+                        <?= e(trans('octoshop.checkout::lang.order.updated_at')) ?> <?= $formModel->updated_at->format("H:i d/m/Y") ?>
                     </p>
                 </div>
             </div>
@@ -73,37 +80,41 @@
                     data-request="onSave"
                     data-request-data="redirect:0"
                     data-hotkey="ctrl+s, cmd+s"
-                    data-load-indicator="Saving Order..."
+                    data-load-indicator="<?= e(trans('octoshop.checkout::lang.order.saving')) ?>"
                     class="btn btn-primary">
-                    <u>S</u>ave
+                    <?= e(trans('backend::lang.form.save')) ?>
                 </button>
                 <button
                     type="button"
                     data-request="onSave"
                     data-request-data="close:1"
                     data-hotkey="ctrl+enter, cmd+enter"
-                    data-load-indicator="Saving Order..."
+                    data-load-indicator="<?= e(trans('octoshop.checkout::lang.order.saving')) ?>"
                     class="btn btn-default">
-                    Save and Close
+                    <?= e(trans('backend::lang.form.save_and_close')) ?>
                 </button>
                 <button
                     type="button"
                     class="oc-icon-trash-o btn-icon danger pull-right"
                     data-request="onDelete"
-                    data-load-indicator="Deleting Order..."
-                    data-request-confirm="Do you really want to delete this order?">
+                    data-load-indicator="<?= e(trans('octoshop.checkout::lang.order.deleting')) ?>"
+                    data-request-confirm="<?= e(trans('octoshop.checkout::lang.order.delete_confirm')) ?>">
                 </button>
                 <span class="btn-text">
-                    or <a href="<?= Backend::url('octoshop/checkout/orders') ?>">Cancel</a>
+                    or <a href="<?= Backend::url('octoshop/checkout/orders') ?>">
+                        <?= e(trans('backend::lang.form.cancel')) ?>
+                    </a>
                 </span>
             </div>
         </div>
 
-    <g?php Block::endPut() ?>
-
 <?php else: ?>
 
     <p class="flash-message static error"><?= e($this->fatalError) ?></p>
-    <p><a href="<?= Backend::url('octoshop/checkout/orders') ?>" class="btn btn-default">Return to orders list</a></p>
+    <p>
+        <a href="<?= Backend::url('octoshop/checkout/orders') ?>" class="btn btn-default">
+            <?= e(trans('octoshop.checkout::lang.order.return_to_orders')) ?>
+        </a>
+    </p>
 
 <?php endif ?>

@@ -1,5 +1,6 @@
 <?php namespace Octoshop\Checkout;
 
+use Lang;
 use Mail;
 
 class Confirmation
@@ -15,7 +16,9 @@ class Confirmation
     public function forGroup($group)
     {
         if (!in_array($group, ['admin', 'customer'])) {
-            throw new ApplicationException('Invalid group "'.$group.'".');
+            throw new ApplicationException(
+                sprintf(Lang::get('octoshop.checkout::lang.mail.invalid_group'), $group)
+            );
         }
 
         $this->group = $group;
@@ -63,7 +66,7 @@ class Confirmation
     {
         if (!$this->$var) {
             throw new ApplicationException(
-                'Missing one or more required parameters. Make sure you call forGroup() before sending.'
+                Lang::get('octoshop.checkout::lang.mail.missing_param')
             );
         }
 

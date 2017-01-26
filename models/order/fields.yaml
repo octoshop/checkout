@@ -2,59 +2,59 @@ tabs:
     fields:
 
         items:
-            tab: Items
+            tab: octoshop.checkout::lang.order.tabs.items
             type: partial
 
         shipping_first_name:
-            label: Name
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.first_name
+            tab: octoshop.checkout::lang.order.tabs.shipping
             span: left
         shipping_last_name:
-            label: Surname
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.last_name
+            tab: octoshop.checkout::lang.order.tabs.shipping
             span: right
         shipping_line1:
-            label: Address Line 1
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.line1
+            tab: octoshop.checkout::lang.order.tabs.shipping
         shipping_line2:
-            label: Address Line 2
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.line2
+            tab: octoshop.checkout::lang.order.tabs.shipping
         shipping_town:
-            label: Town
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.town
+            tab: octoshop.checkout::lang.order.tabs.shipping
         shipping_region:
-            label: Region
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.region
+            tab: octoshop.checkout::lang.order.tabs.shipping
         shipping_postcode:
-            label: Postal Code
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.postcode
+            tab: octoshop.checkout::lang.order.tabs.shipping
         shipping_country:
-            label: Country
-            tab: Shipping Address
+            label: octoshop.checkout::lang.order.address.country
+            tab: octoshop.checkout::lang.order.tabs.shipping
 
         billing_first_name:
-            label: Name
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.first_name
+            tab: octoshop.checkout::lang.order.tabs.billing
             span: left
         billing_last_name:
-            label: Surname
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.last_name
+            tab: octoshop.checkout::lang.order.tabs.billing
             span: right
         billing_line1:
-            label: Address Line 1
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.line1
+            tab: octoshop.checkout::lang.order.tabs.billing
         billing_line2:
-            label: Address Line 2
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.line2
+            tab: octoshop.checkout::lang.order.tabs.billing
         billing_town:
-            label: Town
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.town
+            tab: octoshop.checkout::lang.order.tabs.billing
         billing_region:
-            label: Region
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.region
+            tab: octoshop.checkout::lang.order.tabs.billing
         billing_postcode:
-            label: Postal Code
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.postcode
+            tab: octoshop.checkout::lang.order.tabs.billing
         billing_country:
-            label: Country
-            tab: Billing Address
+            label: octoshop.checkout::lang.order.address.country
+            tab: octoshop.checkout::lang.order.tabs.billing

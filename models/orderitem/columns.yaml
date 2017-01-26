@@ -1,9 +1,9 @@
 columns:
     name:
-        label: Product
+        label: octoshop.checkout::lang.orderitem.name
     quantity:
-        label: Quantity
+        label: octoshop.checkout::lang.orderitem.quantity
     price:
-        label: Unit Price
+        label: octoshop.checkout::lang.orderitem.price
     subtotal:
-        label: Subtotal
+        label: octoshop.checkout::lang.orderitem.subtotal

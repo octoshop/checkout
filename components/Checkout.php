@@ -3,6 +3,7 @@
 use Auth;
 use Cart;
 use Event;
+use Lang;
 use Session;
 use Validator;
 use Backend\Models\BrandSetting;
@@ -53,8 +54,8 @@ class Checkout extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'Checkout',
-            'description' => 'Displays the checkout form on a page.',
+            'name'        => 'octoshop.checkout::lang.components.checkout.name',
+            'description' => 'octoshop.checkout::lang.components.checkout.description',
         ];
     }
 
@@ -173,7 +174,7 @@ class Checkout extends ComponentBase
         $this->order->status()->associate($pending);
 
         if (!$this->order->save()) {
-            throw new ValidationException("Failed to save order.");
+            throw new ValidationException(Lang::get('octoshop.checkout::lang.order.save_failed'));
         }
 
         $this->loadConfirmation();
@@ -209,7 +210,7 @@ class Checkout extends ComponentBase
     protected function sendConfirmations()
     {
         if ($this->sendAdminConfirmation) {
-            $this->confirmation->forGroup('admin') ->send();
+            $this->confirmation->forGroup('admin')->send();
         }
 
         if ($this->sendCustomerConfirmation) {

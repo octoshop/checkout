@@ -1,5 +1,5 @@
 items:
-    label: Order Item
+    label: octoshop.checkout::lang.orderitem.label
     view:
         list: $/octoshop/checkout/models/orderitem/columns.yaml
         toolbarButtons: create|delete
