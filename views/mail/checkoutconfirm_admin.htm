@@ -21,28 +21,28 @@ An order has been placed for {{ order.items|length }} item{% if order.items|leng
             <h4>Billing Address</h4>
 
             <p>
-                {{ order.billing_first_name }} {{ order.billing_last_name }}<br>
+                {{ order.billing_first_name ~' '~ order.billing_last_name }}<br>
                 {% if order.billing_company %}{{ order.billing_company }}<br>{% endif %}
-                {{ order.billing_line1 }}<br>
-                {% if order.billing_line2 %}{{ order.billing_line2 }}<br>{% endif %}
-                {{ order.billing_town }}<br>
-                {{ order.billing_region }}<br>
-                {{ order.billing_postcode }}<br>
-                {{ Order.billing_country }}
+                {{ order.billing_line1 }}
+                {% if order.billing_line2 %}<br>{{ order.billing_line2 }}{% endif %}
+                {% if order.billing_town %}<br>{{ order.billing_town }}{% endif %}
+                {% if order.billing_region %}<br>{{ order.billing_region }}{% endif %}
+                {% if order.billing_postcode %}<br>{{ order.billing_postcode }}{% endif %}
+                {% if order.billing_country %}<br>{{ order.billing_country }}{% endif %}
             </p>
         </td>
         <td>
             <h4>Shipping Address</h4>
 
             <p>
-                {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br>
+                {{ order.shipping_first_name ~' '~ order.shipping_last_name }}<br>
                 {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
-                {{ order.shipping_line1 }}<br>
-                {% if order.shipping_line2 %}{{ order.shipping_line2 }}<br>{% endif %}
-                {{ order.shipping_town }}<br>
-                {{ order.shipping_region }}<br>
-                {{ order.shipping_postcode }}<br>
-                {{ Order.shipping_country }}
+                {{ order.shipping_line1 }}
+                {% if order.shipping_line2 %}<br>{{ order.shipping_line2 }}{% endif %}
+                {% if order.shipping_town %}<br>{{ order.shipping_town }}{% endif %}
+                {% if order.shipping_region %}<br>{{ order.shipping_region }}{% endif %}
+                {% if order.shipping_postcode %}<br>{{ order.shipping_postcode }}{% endif %}
+                {% if order.shipping_country %}<br>{{ order.shipping_country }}{% endif %}
             </p>
         </td>
     </tr>

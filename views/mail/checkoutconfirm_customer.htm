@@ -38,14 +38,14 @@ You recently placed an order for {{ order.items|length }} item{% if order.items|
 <h3>We'll deliver your order to:</h3>
 
 <p>
-    {{ order.shipping_first_name }} {{ order.shipping_last_name }}<br>
+    {{ order.shipping_first_name ~' '~ order.shipping_last_name }}<br>
     {% if order.shipping_company %}{{ order.shipping_company }}<br>{% endif %}
-    {{ order.shipping_line1 }}<br>
-    {% if order.shipping_line2 %}{{ order.shipping_line2 }}<br>{% endif %}
-    {{ order.shipping_town }}<br>
-    {{ order.shipping_region }}<br>
-    {{ order.shipping_postcode }}<br>
-    {{ Order.shipping_country }}
+    {{ order.shipping_line1 }}
+    {% if order.shipping_line2 %}<br>{{ order.shipping_line2 }}{% endif %}
+    {% if order.shipping_town %}<br>{{ order.shipping_town }}{% endif %}
+    {% if order.shipping_region %}<br>{{ order.shipping_region }}{% endif %}
+    {% if order.shipping_postcode %}<br>{{ order.shipping_postcode }}{% endif %}
+    {% if order.shipping_country %}<br>{{ order.shipping_country }}{% endif %}
 </p>
 
 <p>Alternatively, you can <a href="{{ url('account/orders/' ~ order.uuid) }}">view your order</a> on our website.</p>
